@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+@font-face {
+  font-family: "Panchang";
+  src: local("Panchag") url("../public/Panchang/Panchang-Bold.eot"),
+  format("truetype");
+}
+
+@font-face {
+  font-family: "clashDisplay";
+  src: local("Panchag") url("../public/clashDisplay/ClashDisplay-Bold.eot"),
+  format("truetype");
+}
+.h1{
+  font-size: xx-large;
+  font-family: "Panchang";
+}
+
+.h1{
+  font-family: "clashDisplay";
+}
