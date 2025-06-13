@@ -1,10 +1,28 @@
-import { useState } from "react";
-import Adam from "../assets/Adam.jpg";
-import Button from "../components/button";
+import React, { useState } from "react";
 import Corenavbar from "../components/navbar";
 
+const importAll = (r) => {
+  let images = {};
+  r.keys().forEach((item) => {
+    // item vypadá jako "./Adam_20.jpg"
+    const key = item.match(/Adam_(\d+)\.jpg$/)[1]; // získá číslo věku jako string
+    images[key] = r(item);
+  });
+  return images;
+};
+
+// Naimportujeme všechny obrázky z img složky
+const images = importAll(require.context("./img", false, /\.jpg$/));
+
 export default function Home() {
-  const [age, setAge] = useState(20); // výchozí věk
+  const [age, setAge] = useState(20);
+
+  const getImageByAge = (age) => {
+    return images[age] || null; // pokud neexistuje obrázek pro věk, vrátí null
+  };
+
+  const increaseAge = () => setAge((prev) => (prev < 100 ? prev + 1 : prev));
+  const decreaseAge = () => setAge((prev) => (prev > 0 ? prev - 1 : prev));
 
   return (
     <>
@@ -13,22 +31,31 @@ export default function Home() {
         <h1 style={styles.title}>👤 Změň si věk</h1>
 
         <div style={styles.imageContainer}>
-          <img src={Adam} alt="Adam" style={styles.image} />
+          {getImageByAge(age) ? (
+            <img
+              src={getImageByAge(age)}
+              alt={`Adam ve věku ${age}`}
+              style={styles.image}
+            />
+          ) : (
+            <p>Obrázek pro věk {age} není k dispozici.</p>
+          )}
         </div>
 
         <div style={styles.factContainer}>
           <div style={styles.factCard}>
             <p>👋 Ahoj, já jsem <strong>Adam</strong></p>
-
             <p>🎂 Věk: {age} let</p>
           </div>
         </div>
 
         <div style={styles.buttonArea}>
-          <button style={styles.button} onClick={() => setAge(age + 1)}>Zvýšit věk</button>
+          <button style={styles.button} onClick={increaseAge}>
+            Zvýšit věk
+          </button>
           <button
             style={{ ...styles.button, backgroundColor: "#9ad1d4" }}
-            onClick={() => setAge(age - 1)}
+            onClick={decreaseAge}
           >
             Snížit věk
           </button>
